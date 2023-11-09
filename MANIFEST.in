@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include auspost *.css
+recursive-include auspost *.csv
+recursive-include auspost *.html
+recursive-include auspost *.ico
+recursive-include auspost *.js
+recursive-include auspost *.json
+recursive-include auspost *.md
+recursive-include auspost *.png
+recursive-include auspost *.py
+recursive-include auspost *.svg
+recursive-include auspost *.txt
+recursive-exclude auspost *.pyc
