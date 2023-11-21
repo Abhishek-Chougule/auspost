@@ -1,0 +1,293 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{shipment_id}",
+ "creation": "2023-11-10 10:39:00.065453",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "shipment_details",
+  "shipment_id",
+  "customer_reference_1",
+  "email_tracking_enabled",
+  "column_break_gwmap",
+  "shipment_creation_date",
+  "customer_reference_2",
+  "fom_section",
+  "fromtype",
+  "fromlines",
+  "fromsuburb",
+  "frompostcode",
+  "fromstate",
+  "column_break_hej9r",
+  "fromname",
+  "frombusiness_name",
+  "fromcountry",
+  "fromemail",
+  "fromphone",
+  "to_section",
+  "totype",
+  "tolines",
+  "tosuburb",
+  "topostcode",
+  "tostate",
+  "column_break_kfkom",
+  "toname",
+  "tocountry",
+  "toemail",
+  "tophone",
+  "todelivery_instructions",
+  "shipment_summary_section",
+  "shipment_summary_total_cost_ex_gst",
+  "shipping_cost",
+  "fuel_surcharge",
+  "shipment_summary_total_gst",
+  "shipment_summary_status",
+  "column_break_f6yzw",
+  "shipment_summary_total_cost",
+  "number_of_items",
+  "movement_type",
+  "charge_to_account",
+  "shipment_modified_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "shipment_id",
+   "fieldtype": "Data",
+   "label": "Shipment ID"
+  },
+  {
+   "fieldname": "shipment_creation_date",
+   "fieldtype": "Data",
+   "label": "Shipment Creation Date"
+  },
+  {
+   "fieldname": "customer_reference_1",
+   "fieldtype": "Data",
+   "label": "Customer Reference 1"
+  },
+  {
+   "fieldname": "customer_reference_2",
+   "fieldtype": "Data",
+   "label": "Customer Reference 2"
+  },
+  {
+   "fieldname": "email_tracking_enabled",
+   "fieldtype": "Data",
+   "label": "Email Tracking Enabled"
+  },
+  {
+   "fieldname": "fromtype",
+   "fieldtype": "Data",
+   "label": "Type"
+  },
+  {
+   "fieldname": "fromlines",
+   "fieldtype": "Data",
+   "label": "Lines"
+  },
+  {
+   "fieldname": "fromsuburb",
+   "fieldtype": "Data",
+   "label": "Suburb"
+  },
+  {
+   "fieldname": "frompostcode",
+   "fieldtype": "Data",
+   "label": "PostCode"
+  },
+  {
+   "fieldname": "fromstate",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "fromname",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "frombusiness_name",
+   "fieldtype": "Data",
+   "label": "Business Name"
+  },
+  {
+   "fieldname": "fromcountry",
+   "fieldtype": "Data",
+   "label": "Country"
+  },
+  {
+   "fieldname": "fromemail",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "fromphone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "totype",
+   "fieldtype": "Data",
+   "label": "Type"
+  },
+  {
+   "fieldname": "tolines",
+   "fieldtype": "Data",
+   "label": "Lines"
+  },
+  {
+   "fieldname": "tosuburb",
+   "fieldtype": "Data",
+   "label": "Suburb"
+  },
+  {
+   "fieldname": "topostcode",
+   "fieldtype": "Data",
+   "label": "PostCode"
+  },
+  {
+   "fieldname": "tostate",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "toname",
+   "fieldtype": "Data",
+   "label": "Name"
+  },
+  {
+   "fieldname": "tocountry",
+   "fieldtype": "Data",
+   "label": "Country"
+  },
+  {
+   "fieldname": "toemail",
+   "fieldtype": "Data",
+   "label": "Email"
+  },
+  {
+   "fieldname": "tophone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "todelivery_instructions",
+   "fieldtype": "Data",
+   "label": "Delivery Instructions"
+  },
+  {
+   "fieldname": "movement_type",
+   "fieldtype": "Data",
+   "label": "Movement Type"
+  },
+  {
+   "fieldname": "shipment_summary_total_cost_ex_gst",
+   "fieldtype": "Data",
+   "label": "Shipment Summary Total Cost Ex GST"
+  },
+  {
+   "fieldname": "shipping_cost",
+   "fieldtype": "Data",
+   "label": "Shipping Cost"
+  },
+  {
+   "fieldname": "fuel_surcharge",
+   "fieldtype": "Data",
+   "label": "Fuel Surcharge"
+  },
+  {
+   "fieldname": "shipment_summary_total_gst",
+   "fieldtype": "Data",
+   "label": "Shipment Summary Total gst"
+  },
+  {
+   "fieldname": "shipment_summary_status",
+   "fieldtype": "Data",
+   "label": "Shipment Summary Status"
+  },
+  {
+   "fieldname": "number_of_items",
+   "fieldtype": "Data",
+   "label": "Number of Items"
+  },
+  {
+   "fieldname": "charge_to_account",
+   "fieldtype": "Data",
+   "label": "Charge to Account"
+  },
+  {
+   "fieldname": "shipment_modified_date",
+   "fieldtype": "Data",
+   "label": "Shipment Modified Date"
+  },
+  {
+   "fieldname": "shipment_summary_total_cost",
+   "fieldtype": "Data",
+   "label": "Shipment Summary Total Cost"
+  },
+  {
+   "fieldname": "fom_section",
+   "fieldtype": "Section Break",
+   "label": "Shipment From"
+  },
+  {
+   "fieldname": "to_section",
+   "fieldtype": "Section Break",
+   "label": "Shipment To"
+  },
+  {
+   "fieldname": "shipment_summary_section",
+   "fieldtype": "Section Break",
+   "label": "Shipment Summary"
+  },
+  {
+   "fieldname": "shipment_details",
+   "fieldtype": "Section Break",
+   "label": "Shipment Details"
+  },
+  {
+   "fieldname": "column_break_gwmap",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_hej9r",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_kfkom",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_f6yzw",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-11-10 11:23:00.579269",
+ "modified_by": "Administrator",
+ "module": "Auspost",
+ "name": "AusPost Shipment",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

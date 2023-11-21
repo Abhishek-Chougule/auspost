@@ -1,0 +1,162 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-11-10 08:36:24.997053",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "section_break_ldfpt",
+  "username",
+  "account_number",
+  "product_id",
+  "column_break_timya",
+  "password",
+  "status",
+  "section_break_wajk8",
+  "authorization",
+  "sync_now",
+  "shipment_from_address_details_section",
+  "full_name",
+  "lines",
+  "suburb",
+  "state",
+  "column_break_n0rfl",
+  "postcode",
+  "phone",
+  "email"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "fieldname": "username",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Username",
+   "reqd": 1
+  },
+  {
+   "fieldname": "account_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Account Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_timya",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "password",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Password",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "label": "Status"
+  },
+  {
+   "fieldname": "sync_now",
+   "fieldtype": "Button",
+   "label": "Sync Now"
+  },
+  {
+   "depends_on": "eval:doc.enabled==1",
+   "fieldname": "section_break_ldfpt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval:doc.enabled==1",
+   "fieldname": "section_break_wajk8",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "authorization",
+   "fieldtype": "Data",
+   "label": "Authorization",
+   "read_only": 1
+  },
+  {
+   "fieldname": "product_id",
+   "fieldtype": "Data",
+   "label": "Product ID"
+  },
+  {
+   "fieldname": "shipment_from_address_details_section",
+   "fieldtype": "Section Break",
+   "label": "Shipment From Address Details"
+  },
+  {
+   "fieldname": "full_name",
+   "fieldtype": "Data",
+   "label": "Full Name"
+  },
+  {
+   "fieldname": "lines",
+   "fieldtype": "Data",
+   "label": "Lines"
+  },
+  {
+   "fieldname": "suburb",
+   "fieldtype": "Data",
+   "label": "City"
+  },
+  {
+   "fieldname": "state",
+   "fieldtype": "Data",
+   "label": "State"
+  },
+  {
+   "fieldname": "column_break_n0rfl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "postcode",
+   "fieldtype": "Data",
+   "label": "PostCode"
+  },
+  {
+   "fieldname": "phone",
+   "fieldtype": "Data",
+   "label": "Phone"
+  },
+  {
+   "fieldname": "email",
+   "fieldtype": "Data",
+   "label": "Email"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2023-11-17 15:30:09.784947",
+ "modified_by": "Administrator",
+ "module": "Auspost",
+ "name": "AusPost Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

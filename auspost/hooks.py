@@ -9,7 +9,11 @@ app_license = "MIT"
 
 # Includes in <head>
 # ------------------
-
+# doc_events = {
+# 	"Delivery Note": {
+# 		"after_insert": "auspost.auspost.doctype.auspost_settings.auspost_settings.send_shipment_toauspost",
+# 	},
+# }
 # include js, css files in header of desk.html
 # app_include_css = "/assets/auspost/css/auspost.css"
 # app_include_js = "/assets/auspost/js/auspost.js"

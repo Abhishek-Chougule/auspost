@@ -1,0 +1,97 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{package}",
+ "creation": "2023-11-17 09:38:48.464349",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "package",
+  "min_qty",
+  "min_weight",
+  "column_break_3hn6m",
+  "max_qty",
+  "max_weight",
+  "section_break_jwzt1",
+  "length",
+  "width",
+  "height"
+ ],
+ "fields": [
+  {
+   "fieldname": "min_qty",
+   "fieldtype": "Float",
+   "label": "Min Qty"
+  },
+  {
+   "fieldname": "min_weight",
+   "fieldtype": "Float",
+   "label": "Min Weight"
+  },
+  {
+   "fieldname": "column_break_3hn6m",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "max_qty",
+   "fieldtype": "Float",
+   "label": "Max Qty"
+  },
+  {
+   "fieldname": "max_weight",
+   "fieldtype": "Float",
+   "label": "Max Weight"
+  },
+  {
+   "fieldname": "section_break_jwzt1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "length",
+   "fieldtype": "Float",
+   "label": "Length"
+  },
+  {
+   "fieldname": "width",
+   "fieldtype": "Float",
+   "label": "Width"
+  },
+  {
+   "fieldname": "height",
+   "fieldtype": "Float",
+   "label": "Height"
+  },
+  {
+   "fieldname": "package",
+   "fieldtype": "Data",
+   "label": "Package"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-11-17 14:58:21.640767",
+ "modified_by": "Administrator",
+ "module": "Auspost",
+ "name": "AusPost Dimensions",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
