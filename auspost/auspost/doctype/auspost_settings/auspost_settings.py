@@ -7,9 +7,13 @@ import base64
 import requests
 import json
 from datetime import datetime
+from frappe.utils.password import get_decrypted_password
 
 @frappe.whitelist()
-def fulfillment(shopify_order_id,name):
+def complete_fulfillment(shopify_order_id,name):
+	ocs=frappe.get_doc('Shopify Setting')
+	source_token = get_decrypted_password('Shopify Setting', ocs.name, 'password')
+
 	aps=frappe.get_doc('AusPost Settings')
 	current_doc = frappe.get_doc('Delivery Note', name)
 	if not current_doc.tracking_number:
@@ -20,40 +24,119 @@ def fulfillment(shopify_order_id,name):
 
 		shs=frappe.get_doc('Shopify Setting')
 		shopify_url=shs.shopify_url
-		url = f"https://{shopify_url}/admin/api/2023-07/orders/{shopify_order_id}/fulfillments.json"
+		url = f"https://{shopify_url}/admin/api/2023-07/orders/{shopify_order_id}/fulfillment_orders.json?status=in_progress"
 
 		headers = {
-	'X-Shopify-Access-Token': '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'
+		'X-Shopify-Access-Token': source_token,
+		'Content-Type': 'application/json'
 		}
 
 		response = requests.request("GET", url, headers=headers)
 
 		json_response = response.json()
-		# frappe.msgprint(str(json_response['fulfillments'][0]['id']))
-		order_id=str(json_response['fulfillments'][0]['id'])
-
-		url = f"https://{shopify_url}/admin/api/2023-10/fulfillments/{order_id}/update_tracking.json"
+		
+		fulfillment_order_id=str(json_response['fulfillment_orders'][0]['line_items'][0]['fulfillment_order_id'])
+		mid=str(json_response['fulfillment_orders'][0]['line_items'][0]['id'])
+		
+		url = "https://2a5073-4.myshopify.com/admin/api/2023-04/fulfillments.json"
 
 		payload = json.dumps({
 		"fulfillment": {
-			"notify_customer": False,
-			"tracking_info": {
-			"company": "Australia Post",
-			"number": current_doc.tracking_number
+			"line_items_by_fulfillment_order": [
+			{
+				"fulfillment_order_id": fulfillment_order_id,
+				"fulfillment_order_line_items":[{
+					"id":mid,
+					"quantity":1
+				}]
 			}
+			]
 		}
 		})
-		headers = {
-		'X-Shopify-Access-Token': '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',
-		'Content-Type': 'application/json'
-		}
-
+		
 		response = requests.request("POST", url, headers=headers, data=payload)
 
-		if response.status_code==200:
+		if response.status_code==201:
 			frappe.msgprint('Order Fulfilled !')
 		else:
 			frappe.msgprint('Order Not Fulfilled !')
+@frappe.whitelist()
+def fulfillment(shopify_order_id,name):
+
+	ocs=frappe.get_doc('Shopify Setting')
+	source_token = get_decrypted_password('Shopify Setting', ocs.name, 'password')
+
+	aps=frappe.get_doc('AusPost Settings')
+	current_doc = frappe.get_doc('Delivery Note', name)
+	total_items=0
+	
+
+	if not current_doc.tracking_number:
+		frappe.msgprint('First Need to Create the Shipment !')
+	else:
+		account_number=str(aps.account_number)
+		authorization=str(aps.authorization)
+
+		shs=frappe.get_doc('Shopify Setting')
+		shopify_url=shs.shopify_url
+		url = f"https://{shopify_url}/admin/api/2023-07/orders/{shopify_order_id}/fulfillment_orders.json?status=open"
+
+		headers = {
+		'X-Shopify-Access-Token': source_token,
+		'Content-Type': 'application/json'
+		}
+
+		response = requests.request("GET", url, headers=headers)
+
+		json_response = response.json()
+		
+		for total in current_doc.items:
+			
+			fulfillment_order_id=str(json_response['fulfillment_orders'][total_items]['line_items'][total_items]['fulfillment_order_id'])
+			mid=str(json_response['fulfillment_orders'][total_items]['line_items'][total_items]['id'])
+			
+			url = "https://2a5073-4.myshopify.com/admin/api/2023-04/fulfillments.json"
+			item_code_to_check = total.item_code
+			item_stock = get_item_stock(item_code_to_check)
+
+			frappe.msgprint(str(item_stock))
+			frappe.msgprint(str(total.qty))
+			
+			if item_stock>=total.qty:	
+				payload = json.dumps({
+				"fulfillment": {
+					"line_items_by_fulfillment_order": [
+					{
+						"fulfillment_order_id": fulfillment_order_id,
+						"fulfillment_order_line_items":[{
+							"id":mid,
+							"quantity":int(total.qty)
+						}]
+					}
+					]
+				}
+				})
+			elif item_stock!=0 and item_stock<=total.qty:
+				payload = json.dumps({
+				"fulfillment": {
+					"line_items_by_fulfillment_order": [
+					{
+						"fulfillment_order_id": fulfillment_order_id,
+						"fulfillment_order_line_items":[{
+							"id":mid,
+							"quantity":int(item_stock)
+						}]
+					}
+					]
+				}
+				})
+			response = requests.request("POST", url, headers=headers, data=payload)
+
+			if response.status_code==201:
+				frappe.msgprint('Order Fulfilled !')
+			else:
+				frappe.msgprint('Order Not Fulfilled !')
+			total_items+=1
 
 def get_item_stock(item_code):
     stock = frappe.get_value('Stock Ledger Entry', 
@@ -148,6 +231,9 @@ def send_full_shipment_toauspost(name):
 			po = frappe.get_doc(
 			doctype='Purchase Order', 
 			supplier=sup.supplier_info,
+			shopify_order_id=current_doc.shopify_order_id,
+			shopify_order_number=current_doc.shopify_order_number,
+			customer_email=add.email_id,
 			)
 			
 			itemss = [
@@ -288,6 +374,9 @@ def send_shipment_toauspost(name):
 			po = frappe.get_doc(
 			doctype='Purchase Order', 
 			supplier=sup.supplier_info,
+			shopify_order_id=current_doc.shopify_order_id,
+			shopify_order_number=current_doc.shopify_order_number,
+			customer_email=add.email_id,
 			)
 			
 			itemss = [
@@ -303,6 +392,9 @@ def send_shipment_toauspost(name):
 			po = frappe.get_doc(
 			doctype='Purchase Order', 
 			supplier=sup.supplier_info,
+			shopify_order_id=current_doc.shopify_order_id,
+			shopify_order_number=current_doc.shopify_order_number,
+			customer_email=add.email_id,
 			)
 			
 			itemss = [
