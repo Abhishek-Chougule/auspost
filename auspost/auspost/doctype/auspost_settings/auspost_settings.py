@@ -99,8 +99,8 @@ def fulfillment(shopify_order_id,name):
 			item_code_to_check = total.item_code
 			item_stock = get_item_stock(item_code_to_check)
 
-			frappe.msgprint(str(item_stock))
-			frappe.msgprint(str(total.qty))
+			# frappe.msgprint(str(item_stock))
+			# frappe.msgprint(str(total.qty))
 			
 			if item_stock>=total.qty:	
 				payload = json.dumps({
