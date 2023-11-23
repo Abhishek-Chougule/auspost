@@ -10,6 +10,78 @@ from datetime import datetime
 from frappe.utils.password import get_decrypted_password
 
 @frappe.whitelist()
+def print_label(name):
+	aps=frappe.get_doc('AusPost Settings')
+	current_doc = frappe.get_doc('Delivery Note', name)
+	account_number=str(aps.account_number)
+	authorization=str(aps.authorization)
+	
+	url = "https://digitalapi.auspost.com.au/shipping/v1/labels"
+
+	payload = {
+        "wait_for_label_url": True,
+        "unlabelled_articles_only": False,
+        "preferences": [
+            {
+                "type": "PRINT",
+                
+                "groups": [
+                    {
+                        "group": "Parcel Post",
+                        "layout": "A4-1pp",
+                        "branded": True,
+                        "left_offset": 0,
+                        "top_offset": 0
+                    },
+                    {
+                        "group": "Express Post",
+                        "layout": "A4-1pp",
+                        "branded": False,
+                        "left_offset": 0,
+                        "top_offset": 0
+                    }
+                ]
+            }
+        ],
+        "shipments": [
+            {
+                "shipment_id": current_doc.shipment_id,
+                "items": [
+                    {
+                        "item_id": current_doc.item_id
+                    }
+                ]
+            }
+        ]
+    }
+	json_data = json.dumps(payload)
+
+	headers = {
+	'Content-Type': 'application/json',
+	'account-number': account_number,
+	'Authorization': authorization
+	}
+
+	
+
+	
+
+        
+	response = requests.request("POST", url, headers=headers, data=json_data)
+	json_response = response.json()
+
+	current_doc.print_url=str(json_response['labels'][0]['url'])
+	current_doc.save()
+	# Check if the request was successful (status code 200)
+	if response.status_code == 200:
+		frappe.msgprint("Request successful")
+		frappe.msgprint(str(response.text))
+	else:
+		frappe.msgprint(f"Request failed with status code {response.status_code}")
+		frappe.msgprint(response.text)
+
+
+@frappe.whitelist()
 def complete_fulfillment(shopify_order_id,name):
 	ocs=frappe.get_doc('Shopify Setting')
 	source_token = get_decrypted_password('Shopify Setting', ocs.name, 'password')
@@ -42,6 +114,11 @@ def complete_fulfillment(shopify_order_id,name):
 
 		payload = json.dumps({
 		"fulfillment": {
+			"notify_customer":'false',
+					"tracking_info":{
+						"company":"Australia Post",
+						"number":str(current_doc.tracking_number)
+					},
 			"line_items_by_fulfillment_order": [
 			{
 				"fulfillment_order_id": fulfillment_order_id,
@@ -105,6 +182,11 @@ def fulfillment(shopify_order_id,name):
 			if item_stock>=total.qty:	
 				payload = json.dumps({
 				"fulfillment": {
+					"notify_customer":'false',
+					"tracking_info":{
+						"company":"Australia Post",
+						"number":str(current_doc.tracking_number)
+					},
 					"line_items_by_fulfillment_order": [
 					{
 						"fulfillment_order_id": fulfillment_order_id,
@@ -119,6 +201,11 @@ def fulfillment(shopify_order_id,name):
 			elif item_stock!=0 and item_stock<=total.qty:
 				payload = json.dumps({
 				"fulfillment": {
+					"notify_customer":'false',
+					"tracking_info":{
+						"company":"Australia Post",
+						"number":str(current_doc.tracking_number)
+					},
 					"line_items_by_fulfillment_order": [
 					{
 						"fulfillment_order_id": fulfillment_order_id,
@@ -237,12 +324,12 @@ def send_full_shipment_toauspost(name):
 			)
 			
 			itemss = [
-				{"doctype": "Items", "item_code": item.item_code, 'schedule_date': frappe.utils.today(), "qty": item.qty, "rate":item.rate if item.rate!=0 else 1},
+				{"doctype": "Items", "item_code": item.item_code, 'schedule_date': frappe.utils.today(), "qty": item.qty-item_stock, "rate":item.rate if item.rate!=0 else 1},
 				]
 			po.set("items", itemss)
 			po.insert()
 			po.save()
-			frappe.msgprint(f"Created Purchase Order for {item.item_name} ({item_code_to_check}) with quantity : {item.qty}")
+			frappe.msgprint(f"Created Purchase Order for {item.item_name} ({item_code_to_check}) with quantity : {item.qty-item_stock}")
 		
 			
 	account_number=str(aps.account_number)
@@ -262,8 +349,11 @@ def send_full_shipment_toauspost(name):
 	json_response = response.json()
 
 	if response.status_code==201:
+		frappe.msgprint(str(response.text))
 		frappe.msgprint('Shipment Created')
 		current_doc.tracking_number=str(json_response['shipments'][0]['items'][0]['tracking_details']['article_id'])
+		current_doc.shipment_id=str(json_response['shipments'][0]['shipment_id'])
+		current_doc.item_id=str(json_response['shipments'][0]['items'][0]['item_id'])
 		current_doc.save()
 	else:
 		frappe.msgprint('Required stock quantity is not available ! Try Partial/Full Shipment.')
@@ -422,8 +512,11 @@ def send_shipment_toauspost(name):
 
 	json_response = response.json()
 	if response.status_code==201:
+		frappe.msgprint(str(response.text))
 		frappe.msgprint('Shipment Created')
 		current_doc.tracking_number=str(json_response['shipments'][0]['items'][0]['tracking_details']['article_id'])
+		current_doc.shipment_id=str(json_response['shipments'][0]['shipment_id'])
+		current_doc.item_id=str(json_response['shipments'][0]['items'][0]['item_id'])
 		current_doc.save()
 	else:
 		if 'errors' in json_response and json_response['errors']:
